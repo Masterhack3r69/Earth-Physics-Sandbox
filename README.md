@@ -6,7 +6,7 @@ A high-performance falling-sand physics simulator running dynamically in the bro
 
 ## ✨ Features
 
-### Advanced Physics Engine
+### Physics Engine
 
 - **Density Separation**: Materials sort themselves by density (e.g., Oil floats on Water, Sand sinks).
 - **Powder Dynamics**: Sand and Dirt pile up at natural angles of repose.
