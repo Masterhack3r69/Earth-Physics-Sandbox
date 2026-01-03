@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Earth Physics Sandbox</title>
+    <meta
+      name="description"
+      content="Interactive falling-sand physics simulator with realistic material interactions"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Main Canvas Area -->
+      <main class="simulation-area">
+        <canvas id="simulation-canvas"></canvas>
+        <canvas id="overlay-canvas"></canvas>
+      </main>
+
+      <!-- Side Panel -->
+      <aside class="control-panel">
+        <!-- Material Palette -->
+        <section class="panel-section">
+          <h2 class="section-title">Materials</h2>
+          <div class="material-tabs">
+            <button class="tab-btn active" data-category="solids">
+              Solids
+            </button>
+            <button class="tab-btn" data-category="liquids">Liquids</button>
+            <button class="tab-btn" data-category="gases">Gases</button>
+            <button class="tab-btn" data-category="organic">Organic</button>
+            <button class="tab-btn" data-category="energy">Energy</button>
+          </div>
+          <div class="material-grid" id="material-grid">
+            <!-- Materials populated by JS -->
+          </div>
+        </section>
+
+        <!-- Tools Section -->
+        <section class="panel-section">
+          <h2 class="section-title">Tools</h2>
+          <div class="tool-buttons">
+            <button class="tool-btn active" data-tool="draw" title="Draw">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              </svg>
+            </button>
+            <button class="tool-btn" data-tool="erase" title="Erase">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M20 20H7L3 16l9-9 8 8-4 4"></path>
+                <path d="M6 11l8 8"></path>
+              </svg>
+            </button>
+            <button class="tool-btn" data-tool="line" title="Line">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="5" y1="19" x2="19" y2="5"></line>
+              </svg>
+            </button>
+            <button class="tool-btn" data-tool="rect" title="Rectangle">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+              </svg>
+            </button>
+          </div>
+          <div class="brush-size">
+            <label>Brush Size: <span id="brush-size-value">10</span></label>
+            <input type="range" id="brush-size" min="1" max="50" value="10" />
+          </div>
+        </section>
+
+        <!-- Simulation Controls -->
+        <section class="panel-section">
+          <h2 class="section-title">Simulation</h2>
+          <div class="sim-controls">
+            <button class="control-btn" id="btn-play" title="Play/Pause">
+              <svg viewBox="0 0 24 24" fill="currentColor" id="icon-play">
+                <polygon points="5,3 19,12 5,21"></polygon>
+              </svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                id="icon-pause"
+                style="display: none"
+              >
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+            </button>
+            <button class="control-btn" id="btn-step" title="Step">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5,3 15,12 5,21"></polygon>
+                <rect x="15" y="3" width="4" height="18"></rect>
+              </svg>
+            </button>
+            <button class="control-btn" id="btn-reset" title="Reset">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                ></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="speed-control">
+            <label>Speed: <span id="speed-value">1x</span></label>
+            <input
+              type="range"
+              id="sim-speed"
+              min="0.25"
+              max="4"
+              step="0.25"
+              value="1"
+            />
+          </div>
+        </section>
+
+        <!-- Overlays -->
+        <section class="panel-section">
+          <h2 class="section-title">Overlays</h2>
+          <div class="overlay-toggles">
+            <label class="toggle-label">
+              <input type="checkbox" id="overlay-heat" />
+              <span>Temperature</span>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" id="overlay-pressure" />
+              <span>Pressure</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="panel-section stats-section">
+          <div class="stat-row">
+            <span>Particles:</span>
+            <span id="stat-particles">0</span>
+          </div>
+          <div class="stat-row">
+            <span>FPS:</span>
+            <span id="stat-fps">60</span>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
